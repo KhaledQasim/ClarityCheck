@@ -13,7 +13,7 @@
     <body>
         
     <!-- Form and CSS styling copied from https://www.w3schools.com/howto/howto_css_login_form.asp -->
-        <form action="" method="GET"> <!-- addcontent.php -->
+        <form action="" method="GET"> <!-- Action - go to addcontent.php -->
         <div class="container">
             <label for="username"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="username" required>
