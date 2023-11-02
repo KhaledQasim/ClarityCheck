@@ -33,7 +33,7 @@
             required>
             
             <button name="submit" type="submit">Create Account</button>
-            <a href="index.php"> Already have an account? </a>
+            <a href="/"> Already have an account? </a>
         </div>
         </form>
 
