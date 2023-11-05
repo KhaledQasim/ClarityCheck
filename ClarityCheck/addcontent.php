@@ -1,4 +1,4 @@
 <?php
     include("config/connection.php");
-    session_start()
+    session_start();
 ?>
