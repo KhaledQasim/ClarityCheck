@@ -26,14 +26,14 @@
             oninput ="setCustomValidity('')"
             required>
 
-            <!-- Validate strong password (https://www.w3schools.com/howto/howto_js_password_validation.asp) -->
+            <!-- Validate strong password (https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a) -->
             <label for="password"><b>Password</b></label>
             <input 
             type="password" 
             placeholder="Enter Password" 
             name="password" 
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
-            oninvalid="this.setCustomValidity('Password must contain at least 8 characters including one uppercase and lowercase letter, and one number')"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+            oninvalid="this.setCustomValidity('Password must contain at least 8 characters including one uppercase and lowercase letter, one number, and one special character')"
             oninput ="setCustomValidity('')"
             required>
             
