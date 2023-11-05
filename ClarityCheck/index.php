@@ -13,20 +13,18 @@
     <body>
         
     <!-- Form and CSS styling copied from https://www.w3schools.com/howto/howto_css_login_form.asp -->
-        <form action="" method="GET"> <!-- Action - go to addcontent.php -->
+        <form action="" method="GET"> 
         <div class="container">
             <label for="username"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="username" required>
 
-            <label for="password"><b>Password</b></label>
-
             <!-- Mitigation - Type password hides passwords from being shown in clear text and prevents shoulder surfing -->
+            <label for="password"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="password" required>
             
             <button name="submit" type="submit">Login</button>
             <a href="signup.php"> Don't have an account? </a>
         </div>
-
         </form>
 
         <?php
@@ -38,7 +36,6 @@
                     $password = $_GET["password"];
 
                     // Query vulnerbale to SQL Injection
-
                     //$sql = "SELECT * FROM users WHERE username='". $username . "' AND password='" . $password . "';";
                     //$result = mysqli_query($con, $sql);
 
@@ -52,11 +49,12 @@
 
                         if (password_verify($password, $hashed_password)) {
 
-                            echo "Hello " . $username . "!" ;
-                            echo "<br>";
                             session_start();
                             $_SESSION['login']=true;
                             $_SESSION['username'] = $username;
+                            echo "<br>";
+                            echo "Successfully logged in!";
+                            echo "<a href='viewcontent.php'> View your prescriptions here. </a>";
                         
                         } else {
                             print("Password is invalid");

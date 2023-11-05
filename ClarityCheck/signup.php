@@ -12,23 +12,28 @@
 </head>
     <body>
     <!-- Form and CSS styling copied from https://www.w3schools.com/howto/howto_css_login_form.asp -->
-        <form action="" method="POST"> <!-- index.php -->
+        <form action="" method="POST"> 
         <div class="container">
 
+            <!-- Validate username -->
             <label for="username"><b>Username</b></label>
             <input 
             type="text" 
             placeholder="Enter Username" 
             name="username" 
+            pattern="^[a-zA-Z0-9]*$"
+            oninvalid="this.setCustomValidity('Username must only contain letters and numbers')"
+            oninput ="setCustomValidity('')"
             required>
 
+            <!-- Validate strong password (https://www.w3schools.com/howto/howto_js_password_validation.asp) -->
             <label for="password"><b>Password</b></label>
             <input 
             type="password" 
             placeholder="Enter Password" 
             name="password" 
-            required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            oninvalid="this.setCustomValidity('Password must contain 8 characters including an uppercase, lowercase and a number')"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+            oninvalid="this.setCustomValidity('Password must contain at least 8 characters including one uppercase and lowercase letter, and one number')"
             oninput ="setCustomValidity('')"
             required>
             
@@ -53,6 +58,10 @@
                     # Mitigation - Prepares, binds parameters, and executes SQL statement (https://www.php.net/manual/en/mysqli.execute-query.php)
                     $params = array($username, $hashed_password);
                     $result = $con->execute_query("INSERT INTO users VALUES(?, ?)", $params);
+
+                    echo "<br>";
+                    echo "Account Created!";
+                    echo "<a href='index.php'> Login here. </a>";
                 }
             }
         ?>
