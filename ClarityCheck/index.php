@@ -54,7 +54,7 @@
                             $_SESSION['username'] = $username;
                             echo "<br>";
                             echo "Successfully logged in!";
-                            echo "<a href='viewcontent.php'> View your prescriptions here. </a>";
+                            echo "<a href='view_prescription.php'> View your prescriptions here. </a>";
                         
                         } else {
                             print("Password is invalid");
