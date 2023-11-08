@@ -54,14 +54,17 @@
                 # Mitigation - Password hashing
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                # Mitigation - Prepares, binds parameters, and executes SQL statement (https://www.php.net/manual/en/mysqli.execute-query.php)
-                $params = array($username, $hashed_password);
+               
 
-                $query = "INSERT INTO users (username, password) VALUES(?, ?)";
-                $con->execute_query($query, $params);
                 # Insecure code - Query vulnerbale to SQL Injection
                 # $sql = "INSERT INTO users VALUES('". $username . "', '" . $password . "');";
                 # $result = mysqli_query($con, $sql);
+
+                # Mitigation - Prepares, binds parameters, and executes SQL statement (https://www.php.net/manual/en/mysqli.execute-query.php)
+                $params = array($username, $hashed_password);
+                $query = "INSERT INTO users (username, password) VALUES(?, ?)";
+                $con->execute_query($query, $params);
+             
     
 
                 session_start();
