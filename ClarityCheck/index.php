@@ -2,6 +2,7 @@
 <?php
 // Imports the mysql database connection settings then checks for the existence of the users table and user_prescriptions table. 
 // If they do not exist, they are created.
+session_destroy();
 include("config/connection.php");
 
 $table_users = $con->query("SHOW TABLES LIKE 'users'");
@@ -33,6 +34,15 @@ if ($table_user_prescriptions->num_rows <= 0) {
 }
 
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['logout.php'])){
+    session_destroy();
+   
+
+}
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +58,7 @@ if ($table_user_prescriptions->num_rows <= 0) {
 <body>
 
     <!-- Form and CSS styling copied from https://www.w3schools.com/howto/howto_css_login_form.asp -->
-    <form action="" method="GET">
+    <form action="" method="POST">
         <div class="container">
             <label for="username"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="username" required>
@@ -57,18 +67,18 @@ if ($table_user_prescriptions->num_rows <= 0) {
             <label for="password"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="password" required>
 
-            <button name="submit" type="submit">Login</button>
+            <button class="default-button" name="submit" type="submit">Login</button>
             <a href="signup.php"> Don't have an account? </a>
         </div>
     </form>
 
     <?php
 
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        if (isset($_GET['submit'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['submit'])) {
 
-            $username = $_GET["username"];
-            $password = $_GET["password"];
+            $username = $_POST["username"];
+            $password = $_POST["password"];
 
             // Query vulnerbale to SQL Injection
             //$sql = "SELECT * FROM users WHERE username='". $username . "' AND password='" . $password . "';";
@@ -87,10 +97,9 @@ if ($table_user_prescriptions->num_rows <= 0) {
                     session_start();
                     $_SESSION['login'] = true;
                     $_SESSION['username'] = $username;
-                    echo "<br>";
-                    echo "Successfully logged in!";
-                    echo "<a href='view_prescription.php'> View your prescriptions here. </a>";
-
+                    // header("Location: logged_in.php");
+                    header("Location: logged_in.php");
+                    
                 } else {
                     print("Password is invalid");
                 }
@@ -99,6 +108,7 @@ if ($table_user_prescriptions->num_rows <= 0) {
                 print("Username or password is invalid");
             }
         }
+
     }
     ?>
 

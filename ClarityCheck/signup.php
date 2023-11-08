@@ -1,6 +1,4 @@
-<?php
-    include("config/connection.php");
-?>
+
 
 <!DOCTYPE html>
 <html>
@@ -12,7 +10,7 @@
 </head>
     <body>
     <!-- Form and CSS styling copied from https://www.w3schools.com/howto/howto_css_login_form.asp -->
-        <form action="" method="POST"> 
+        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST"> 
         <div class="container">
 
             <!-- Validate username -->
@@ -37,17 +35,18 @@
             oninput ="setCustomValidity('')"
             required>
             
-            <button name="submit" type="submit">Create Account</button>
+            <button class="default-button" name="submit" type="submit">Create Account</button>
             <a href="index.php"> Already have an account? </a>
         </div>
         </form>
 
-        <?php
+        <?php 
+            include("config/connection.php");
+      
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (isset($_POST['submit'])) {
                     $username = $_POST["username"];
                     $password = $_POST["password"];
-
                     # Mitigation - Password is sent and stored as a hash.
                     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -57,13 +56,21 @@
 
                     # Mitigation - Prepares, binds parameters, and executes SQL statement (https://www.php.net/manual/en/mysqli.execute-query.php)
                     $params = array($username, $hashed_password);
-                    $result = $con->execute_query("INSERT INTO users VALUES(?, ?)", $params);
+               
+                    $query = "INSERT INTO users (username, password) VALUES(?, ?)";
+                    $con->execute_query($query,  $params);
 
-                    echo "<br>";
-                    echo "Account Created!";
-                    echo "<a href='index.php'> Login here. </a>";
+
+                    session_start();
+                    $_SESSION['login'] = true;
+                    $_SESSION['username'] = $username;
+                    header("Location: logged_in.php");
+
+                
                 }
+          
             }
+           
         ?>
 
 
