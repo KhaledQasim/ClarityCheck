@@ -67,10 +67,14 @@ include("config/connection.php");
                 // fixing unwanted final values formatting
                 $new_value1 = explode("=> '", $value1);
                 $new_value5 = trim($value5, "'");
-                //
-
+                
+                // secure against this xss attack
+                $xss_attack = "<script type='text/javascript' >
+                            alert('hello');
+                            </script>";
                 $html = 
                 "
+                $xss_attack
                 <br>
                 <h4> Age: " . $new_value1[1] . "</h4>
                 <h4> Do you feel any irritation in your eyes?: " . $value2 . "</h4>

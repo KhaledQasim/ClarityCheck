@@ -30,7 +30,7 @@
             <a href="index.php"> Already have an account? </a>
         </div>
     </form>
-
+   
     <?php
     include("config/connection.php");
 
@@ -39,39 +39,50 @@
             $username = $_POST["username"];
             $password = $_POST["password"];
 
+            $params_check_unique_username = array($username);
+            $result = $con->execute_query("SELECT * FROM users WHERE username=?", $params_check_unique_username);
 
-            // Mitigation: Server-side password validation (https://www.codexworld.com/how-to/validate-password-strength-in-php/)
-            $uppercase = preg_match('@[A-Z]@', $password);
-            $lowercase = preg_match('@[a-z]@', $password);
-            $number = preg_match('@[0-9]@', $password);
-            $specialChars = preg_match('@[^\w]@', $password);
-
-            if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-
-                echo 'Password must contain at least 8 characters including one uppercase and lowercase letter, one number, and one special character';
+            if (mysqli_num_rows($result) > 0) {
+                
+                echo "<h3 style='color: red;'>Username already taken, Please try again with a different username</h3>";
+           
 
             } else {
-                # Mitigation - Password hashing
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                // Mitigation: Server-side password validation (https://www.codexworld.com/how-to/validate-password-strength-in-php/)
+                $uppercase = preg_match('@[A-Z]@', $password);
+                $lowercase = preg_match('@[a-z]@', $password);
+                $number = preg_match('@[0-9]@', $password);
+                $specialChars = preg_match('@[^\w]@', $password);
 
-               
+                if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
 
-                # Insecure code - Query vulnerbale to SQL Injection
-                # $sql = "INSERT INTO users VALUES('". $username . "', '" . $password . "');";
-                # $result = mysqli_query($con, $sql);
+                    echo 'Password must contain at least 8 characters including one uppercase and lowercase letter, one number, and one special character';
 
-                # Mitigation - Prepares, binds parameters, and executes SQL statement (https://www.php.net/manual/en/mysqli.execute-query.php)
-                $params = array($username, $hashed_password);
-                $query = "INSERT INTO users (username, password) VALUES(?, ?)";
-                $con->execute_query($query, $params);
-             
+                } else {
+                    # Mitigation - Password hashing
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+
+
+                    # Insecure code - Query vulnerbale to SQL Injection
+                    # $sql = "INSERT INTO users VALUES('". $username . "', '" . $password . "');";
+                    # $result = mysqli_query($con, $sql);
     
+                    # Mitigation - Prepares, binds parameters, and executes SQL statement (https://www.php.net/manual/en/mysqli.execute-query.php)
+                    $params = array($username, $hashed_password);
+                    $query = "INSERT INTO users (username, password) VALUES(?, ?)";
+                    $con->execute_query($query, $params);
 
-                session_start();
-                $_SESSION['login'] = true;
-                $_SESSION['username'] = $username;
-                header("Location: logged_in.php");
+
+
+                    session_start();
+                    $_SESSION['login'] = true;
+                    $_SESSION['username'] = $username;
+                    header("Location: logged_in.php");
+                }
             }
+
+
         }
     }
     ?>

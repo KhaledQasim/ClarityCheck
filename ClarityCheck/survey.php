@@ -84,6 +84,7 @@ include("config/connection.php");
             if (isset($_POST['submit'])) {
                 $username = $_SESSION["username"];
 
+                // do some server side validation before inserting into database
                 $age = $_POST["age"];
                 $irritation = $_POST["irritation"];
                 $glasses = $_POST["glasses"];

@@ -101,11 +101,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: logged_in.php");
                     
                 } else {
-                    print("Password is invalid");
+                    echo "<h3 style='color: red;'>Password is Invalid</h3>";
                 }
 
             } else {
-                print("Username or password is invalid");
+                echo "<h3 style='color: red;'>Username or Password is invalid</h3>";
             }
         }
 
