@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="username"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="username" required>
 
-            <!-- Mitigation - Type password hides passwords from being shown in clear text and prevents shoulder surfing -->
+            <!-- Mitigation: Type password hides passwords from being shown in clear text and prevents shoulder surfing -->
             <label for="password"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="password" required>
 
@@ -80,11 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST["username"];
             $password = $_POST["password"];
 
-            // Query vulnerbale to SQL Injection
+            // Insecure code - Query vulnerbale to SQL Injection
             //$sql = "SELECT * FROM users WHERE username='". $username . "' AND password='" . $password . "';";
             //$result = mysqli_query($con, $sql);
     
-            // Mitigation - Parameters are prepared and statement is executed
+            // Mitigation: Prepared statement
             $params = array($username);
             $result = $con->execute_query("SELECT * FROM users WHERE username=?", $params);
 

@@ -8,6 +8,7 @@
     <link href = "css/layout.css" rel = "stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
     <body>
     <!-- Form and CSS styling copied from https://www.w3schools.com/howto/howto_css_login_form.asp -->
         <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST"> 
@@ -24,7 +25,7 @@
             oninput ="setCustomValidity('')"
             required>
 
-            <!-- Validate strong password (https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a) -->
+            <!-- Mitigation: Client-side password validation -->
             <label for="password"><b>Password</b></label>
             <input 
             type="password" 
@@ -47,18 +48,30 @@
                 if (isset($_POST['submit'])) {
                     $username = $_POST["username"];
                     $password = $_POST["password"];
-                    # Mitigation - Password is sent and stored as a hash.
                     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                    # Query vulnerbale to SQL Injection
-                    # $sql = "INSERT INTO users VALUES('". $username . "', '" . $password . "');";
-                    # $result = mysqli_query($con, $sql);
+                    // Mitigation: Server-side password validation (https://www.codexworld.com/how-to/validate-password-strength-in-php/)
+                    $uppercase = preg_match('@[A-Z]@', $password);
+                    $lowercase = preg_match('@[a-z]@', $password);
+                    $number    = preg_match('@[0-9]@', $password);
+                    $specialChars = preg_match('@[^\w]@', $password);
+                    
+                    if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+
+                        echo 'Password must contain at least 8 characters including one uppercase and lowercase letter, one number, and one special character';
+                    
+                    } else {
+                        # Mitigation - Password hashing
+                        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                     # Mitigation - Prepares, binds parameters, and executes SQL statement (https://www.php.net/manual/en/mysqli.execute-query.php)
                     $params = array($username, $hashed_password);
                
                     $query = "INSERT INTO users (username, password) VALUES(?, ?)";
                     $con->execute_query($query,  $params);
+                        # Insecure code - Query vulnerbale to SQL Injection
+                        # $sql = "INSERT INTO users VALUES('". $username . "', '" . $password . "');";
+                        # $result = mysqli_query($con, $sql);
 
 
                     session_start();
