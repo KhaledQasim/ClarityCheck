@@ -2,7 +2,12 @@ https://github.com/KhaledQasim/ClarityCheck
 
 # ClarityCheck
 
-Coursework due 09/11/2023
+PHP server that displays how weak code can be open to SQL injection, XSS and Stored XSS attacks.
+
+Also shows how to fix the weak code and make it secure.
+
+Explained in detail inside the report file at /report/ClarityCheck_CS3SP_Report.pdf
+
 
 # Requirements
 
