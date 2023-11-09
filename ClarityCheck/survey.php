@@ -38,7 +38,7 @@ include("config/connection.php");
             <form method='POST' action=''>
 
 
-            <label for='age'>Your Age:</label>
+            <label for='age'>Your Age (between 0 to 100):</label>
             <input type='number' name='age' required><br>
     
     
@@ -61,12 +61,12 @@ include("config/connection.php");
             <h4>Choose the reading glasses strength Lens Power next to the lowest (smallest) letters you can read easily for
             each eye. Fill the data in the inputs below</h4>
           
-            <label for='right-eye'>Your Right Eye Value:</label>
-            <input type='number' name='right-eye' required><br>
+            <label for='right-eye'>Your Right Eye Value (between 0 to 5):</label>
+            <input type='float' name='right-eye' required><br>
             <br>
     
-            <label for='left-eye'>Your Left Eye Value:</label>
-            <input type='number' name='left-eye' required><br>
+            <label for='left-eye'>Your Left Eye Value (between 0 to 5):</label>
+            <input type='float' name='left-eye' required><br>
     
     
     
@@ -82,6 +82,8 @@ include("config/connection.php");
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['submit'])) {
+            
+
                 $username = $_SESSION["username"];
 
                 // do some server side validation before inserting into database
@@ -91,12 +93,40 @@ include("config/connection.php");
                 $right_eye = $_POST["right-eye"];
                 $left_eye = $_POST["left-eye"];
                 
-          
+                if (!filter_var($age, FILTER_VALIDATE_INT, ["options" => ["max_range" <= 100],["min_range" => 1]]) !== false) {
+                    echo "<h1 style='color: red'>Invalid age range, must be between 0 to 100</h1>";
+                    exit(); 
+                } 
+                if ($irritation !== "Yes" && $irritation !== "No") {
+                    echo "<h1 style='color: red'>Invalid irritation value, must be Yes or No</h1>";
+                    exit(); 
+                }
+                if ($glasses !== "Yes" && $glasses !== "No") {
+                    echo "<h1 style='color: red'>Invalid glasses value, must be Yes or No</h1>";
+                    exit(); 
+                }
+                if (!filter_var($right_eye, FILTER_VALIDATE_FLOAT, ["options" => ["max_range" => 5],["min_range" > 0]]) !== false) {
+                    echo "<h1 style='color: red'>Invalid right eye range value, must be below 5 and above 0</h1>";
+                    exit(); 
+                }
+                if (!filter_var($left_eye, FILTER_VALIDATE_FLOAT, ["options" => ["max_range" => 5],["min_range" > 0],["decimal" < 2]]) !== false) {
+                    echo "<h1 style='color: red'>Invalid left eye range value, must be below 5 and above 0</h1>";
+                    exit(); 
+                }
+                
+                $left_eye = number_format($left_eye, 2);
+                $right_eye = number_format($right_eye, 2);
+
+                
                 $data_array = array($age, $irritation, $glasses, $right_eye, $left_eye);
-                $data = implode(",",$data_array);
+                
               
-              
+ 
                
+
+                $data = implode(",",$data_array);
+
+           
                 # Insecure code - Query vulnerable to SQL Injection
                 # $sql = "INSERT INTO user_prescriptions VALUES('". $username . "', '" . $data . "');";
                 # $result = mysqli_query($con, $sql);

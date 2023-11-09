@@ -69,23 +69,26 @@ include("config/connection.php");
                 $new_value5 = trim($value5, "'");
                 
                 // secure against this xss attack
-                $xss_attack = "<script type='text/javascript' >
-                            alert('hello');
+                $stored_xss_attack = "<script type='text/javascript' >
+                            alert('Your Are Hacked!!');
                             </script>";
                 $html = 
                 "
-                $xss_attack
-                <br>
-                <h4> Age: " . $new_value1[1] . "</h4>
-                <h4> Do you feel any irritation in your eyes?: " . $value2 . "</h4>
-                <h4> Do you currently wear glasses?: " . $value3 . "</h4>
-                <h4> Right Eye: " . $value4 . "</h4>
-                <h4> Left Eye: " . $new_value5 . "</h4>
-                <br>
+                 
+                 
+                 Age: " . $new_value1[1] . ",
+                 Do you feel any irritation in your eyes?: " . $value2 . ",
+                 Do you currently wear glasses?: " . $value3 . ",
+                 Right Eye: +" . $value4 . ",
+                 Left Eye: +" . $new_value5 . "
+               
                 ";
-                echo $html;
+                // code vulnerable to Stored XSS attack, when moving the variable $stored_xss_attack inside the  $html variable, the script is executed
+                // echo $html;
+                // MITIGATION, htmlspecialchars() function will not execute the script , instead will just print it out as a string
+                echo '<h3><br>' .htmlspecialchars($html, ENT_QUOTES, 'UTF-8'). '</h3>';
             }
- $x++;
+
             // $user_data_array = explode(",",$user_data["data"]);
             // var_dump($user_data_array);
             // $html =
