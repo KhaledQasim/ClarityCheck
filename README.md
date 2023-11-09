@@ -20,4 +20,4 @@ And Create a Database called 'claritycheck'
 The tables will be automatically created upon loading of the index.php file
 
 
-If not then check your settings inside the config/database.php
+If not then check your settings inside the config/connection.php
