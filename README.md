@@ -1,4 +1,5 @@
-https://github.com/xJonah/ClarityCheck
+https://github.com/KhaledQasim/ClarityCheck
+
 # ClarityCheck
 
 Coursework due 09/11/2023
